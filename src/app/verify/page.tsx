@@ -15,15 +15,18 @@ import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import useAuth from "../stores/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function Verify() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [emailFilled, setEmailFilled] = useState(false);
-  const login = useAuth((state) => state.login);
+  const setLogin = useAuth((state) => state.setLogin);
 
   useEffect(() => {
     const email = window.localStorage.getItem("email");
+    window.localStorage.removeItem("email");
 
     if (email) {
       setEmail(email);
@@ -36,7 +39,6 @@ export default function Verify() {
     const form = new FormData(e.target as HTMLFormElement);
     setIsLoading(true);
     const result = await signInPasswordlessConfirm(email, window.location.href);
-    setIsLoading(false);
 
     if (result.email) {
       let n = result.displayName || "";
@@ -45,8 +47,11 @@ export default function Verify() {
         n = form.get("name") as string;
       }
 
-      login(result.email, n, result.photoURL || "");
+      setLogin(result.email, n, result.photoURL || "");
+      router.push("/");
     }
+
+    setIsLoading(false);
   };
 
   return (
