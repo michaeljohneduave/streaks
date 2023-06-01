@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Login from "./Login";
+import LoginContainer from "./LoginContainer";
 
 export default function Header() {
   return (
@@ -17,7 +17,7 @@ export default function Header() {
         </div>
         <div className="text-xl font-bold">Streaks</div>
         <div className="text-xl ml-auto">
-          <Login />
+          <LoginContainer />
         </div>
       </nav>
     </header>
