@@ -4,7 +4,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../component/ui/dropdown-menu";
+} from "./ui/dropdown-menu";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import { LogOut, Settings, User } from "lucide-react";
 
