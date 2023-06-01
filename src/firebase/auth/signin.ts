@@ -53,7 +53,7 @@ async function signInPasswordlessConfirm(
 ): Promise<UserToken> {
   let user = {} as User;
   let token = "";
-  console.log(email, href);
+
   try {
     const result = await signInWithEmailLink(auth, email, href);
     const credentials = GoogleAuthProvider.credentialFromResult(result);

@@ -3,7 +3,7 @@ import LoginContainer from "./LoginContainer";
 
 export default function Header() {
   return (
-    <header className="bg-blue-500 text-white shadow py-4">
+    <header className="bg-blue-500 text-white shadow py-2">
       <nav className="container mx-auto flex items-center">
         <div className="mr-5">
           <div className="text-2xl font-bold">
