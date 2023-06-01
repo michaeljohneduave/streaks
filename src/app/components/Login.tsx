@@ -10,15 +10,17 @@ import { Input } from "./ui/input";
 import { signInGoogle, signInPasswordless } from "@/firebase/auth/signin";
 import useAuth from "../stores/useAuth";
 import { useToast } from "./ui/use-toast";
+import ProfileMenu from "./ProfileMenu";
+import { useGetFromAuth } from "../hooks/zustand";
 
 export default function Login() {
   const [showModal, setShowModal] = useState(false);
-  const login = useAuth((state) => state.login);
-  const user = useAuth((state) => ({
-    isLoggedIn: state.isLoggedIn,
-    name: state.name,
-    photoURL: state.photoURL,
-  }));
+  const setLogin = useAuth((state) => state.setLogin);
+  const setLogout = useAuth((state) => state.setLogout);
+  const name = useGetFromAuth(useAuth, (state) => state.name);
+  const photoURL = useGetFromAuth(useAuth, (state) => state.photoURL);
+  const isLoggedIn = useGetFromAuth(useAuth, (state) => state.isLoggedIn);
+
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -38,7 +40,7 @@ export default function Login() {
     const response = await signInGoogle();
 
     if (response.email && response.displayName) {
-      login(response.email, response.displayName, response.photoURL || "");
+      setLogin(response.email, response.displayName, response.photoURL || "");
       setShowModal(false);
     }
   };
@@ -96,11 +98,12 @@ export default function Login() {
           </div>
         </Modal>
       ) : null}
-      {user.isLoggedIn ? (
-        <div>
-          <img src={user.photoURL} alt={user.name} />
-          <span>{user.name}</span>
-        </div>
+      {isLoggedIn ? (
+        <ProfileMenu
+          name={name || ""}
+          photoURL={photoURL || ""}
+          logout={setLogout}
+        />
       ) : (
         <div className="cursor-pointer" onClick={() => setShowModal(true)}>
           Sign In
