@@ -65,7 +65,12 @@ export default function Verify() {
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-5">
                 <Label htmlFor="name">Name</Label>
-                <Input type="text" name="name" placeholder="Name" />
+                <Input
+                  type="text"
+                  name="name"
+                  autoComplete="name"
+                  placeholder="Name"
+                />
               </div>
               <div className="flex flex-col space-y-5">
                 <Label htmlFor="email">Email</Label>
@@ -73,6 +78,7 @@ export default function Verify() {
                   type="email"
                   name="email"
                   placeholder="Email"
+                  autoComplete="email"
                   defaultValue={email}
                   disabled={emailFilled}
                 />
