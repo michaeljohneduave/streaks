@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -34,12 +35,16 @@ export default function ProfileMenu({
           <DropdownMenuLabel>{name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuLabel className="flex items-center cursor-pointer hover:bg-slate-100">
-            <User className="mr-5 h-4 w-4" />
-            <span>Profile</span>
+            <Link className="flex item-center" href="/profile">
+              <User className="mr-5 h-4 w-4" />
+              <span>Profile</span>
+            </Link>
           </DropdownMenuLabel>
-          <DropdownMenuLabel className="flex items-center cursor-pointer hover:bg-slate-100">
-            <Settings className="mr-5 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuLabel className="hover:bg-slate-100">
+            <Link className="flex item-center" href="/settings">
+              <Settings className="mr-5 h-4 w-4" />
+              <span>Settings</span>
+            </Link>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuLabel
