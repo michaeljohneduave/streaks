@@ -9,7 +9,6 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { signInGoogle, signInPasswordless } from "@/firebase/auth/signin";
 import useAuth from "../stores/useAuth";
-import { useToast } from "./ui/use-toast";
 import ProfileMenu from "./ProfileMenu";
 import { useGetFromAuth } from "../hooks/zustand";
 
@@ -20,9 +19,6 @@ export default function Login() {
   const name = useGetFromAuth(useAuth, (state) => state.name);
   const photoURL = useGetFromAuth(useAuth, (state) => state.photoURL);
   const isLoggedIn = useGetFromAuth(useAuth, (state) => state.isLoggedIn);
-
-  const { toast } = useToast();
-
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const form = new FormData(e.target as HTMLFormElement);
@@ -30,10 +26,6 @@ export default function Login() {
     window.localStorage.setItem("email", form.get("email") as string);
     await signInPasswordless(form.get("email") as string);
     setShowModal(false);
-    toast({
-      title: "Email Sent",
-      description: "Check your email to sign in",
-    });
   };
 
   const handleGoogleSignIn = async () => {
@@ -73,6 +65,7 @@ export default function Login() {
                       type="email"
                       name="email"
                       placeholder="Email"
+                      autoComplete="email"
                       required
                     />
                     <Button className="min-w-max" type="submit">
