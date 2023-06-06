@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <header className="bg-blue-500 text-white shadow py-2">
+    <header className="bg-blue-500 text-white shadow py-5">
       <nav className="container mx-auto flex items-center">
         <Link href="/">
           <div className="flex items-center">
@@ -21,7 +21,7 @@ export default function Navbar() {
             <div className="text-xl font-bold">Streaks</div>
           </div>
         </Link>
-        <div className="text-xl ml-auto">
+        <div className="ml-auto">
           <LoginContainer />
         </div>
       </nav>
