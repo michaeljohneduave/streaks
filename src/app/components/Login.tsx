@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { XSquare } from "lucide-react";
-import Modal from "./Modal";
+import { Modal, ModalBody, ModalHeader } from "./Modal";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { signInGoogle, signInPasswordless } from "@/firebase/auth/signin";
@@ -41,23 +41,19 @@ export default function Login() {
     <>
       {showModal ? (
         <Modal>
-          <div
-            x-show="open"
-            className="fixed left-0 top-0 w-full h-full flex items-center justify-center z-50"
-            style={{ backgroundColor: "rgba(0, 0, 0, .5)" }}
-          >
-            <div className="bg-white rounded shadow-lg w-1/3">
-              <header className="border-b p-4 text-lg font-semibold">
-                <div className="flex items-center">
-                  <span>Sign In</span>
-                  <span
-                    className="ml-auto cursor-pointer"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <XSquare />
-                  </span>
-                </div>
-              </header>
+          <div className="bg-white rounded shadow-lg w-1/3">
+            <ModalHeader>
+              <div className="flex items-center">
+                <span>Sign In</span>
+                <span
+                  className="ml-auto cursor-pointer"
+                  onClick={() => setShowModal(false)}
+                >
+                  <XSquare />
+                </span>
+              </div>
+            </ModalHeader>
+            <ModalBody>
               <main className="p-4">
                 <form onSubmit={handleSubmit}>
                   <div className="flex w-full items-center space-x-2">
@@ -87,7 +83,7 @@ export default function Login() {
                   </Button>
                 </div>
               </main>
-            </div>
+            </ModalBody>
           </div>
         </Modal>
       ) : null}

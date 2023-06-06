@@ -27,7 +27,7 @@ export default function Greeting() {
 
   return (
     <div>
-      <h1 className="text-4xl">{greeting}!</h1>
+      <h1 className="text-5xl">{greeting}!</h1>
       <Bedtime />
     </div>
   );

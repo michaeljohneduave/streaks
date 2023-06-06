@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, EffectCallback } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-export default function Modal({ children }: { children: React.ReactNode }) {
+export function Modal({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLElement | null>(null);
 
   if (!ref.current) {
@@ -20,5 +20,26 @@ export default function Modal({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return createPortal(<div>{children}</div>, ref.current);
+  return createPortal(
+    <div
+      x-show="open"
+      className="fixed left-0 top-0 w-full h-full flex items-center justify-center z-50"
+      style={{ backgroundColor: "rgba(0, 0, 0, .5)" }}
+    >
+      {children}
+    </div>,
+    ref.current
+  );
+}
+
+export function ModalHeader({ children }: { children: React.ReactNode }) {
+  return <header className="border-b text-lg font-semibold">{children}</header>;
+}
+
+export function ModalBody({ children }: { children: React.ReactNode }) {
+  return <main>{children}</main>;
+}
+
+export function ModalFooter({ children }: { children: React.ReactNode }) {
+  return <footer>{children}</footer>;
 }
