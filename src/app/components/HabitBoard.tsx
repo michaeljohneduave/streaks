@@ -7,19 +7,19 @@ export default function HabitBoard() {
     <div className="my-5">
       <div className="flex space-x-5">
         <div className="w-2/3">
-          <Tabs>
+          <Tabs defaultValue="week">
             <TabsList className="flex rounded-full w-full h-full">
-              <TabsTrigger
-                className="basis-1/4 rounded-full m-1 text-lg"
-                value="month"
-              >
-                Month
-              </TabsTrigger>
               <TabsTrigger
                 className="basis-1/4 rounded-full m-1 text-lg"
                 value="week"
               >
                 Week
+              </TabsTrigger>
+              <TabsTrigger
+                className="basis-1/4 rounded-full m-1 text-lg"
+                value="month"
+              >
+                Month
               </TabsTrigger>
               <TabsTrigger
                 className="basis-1/4 rounded-full m-1 text-lg"
