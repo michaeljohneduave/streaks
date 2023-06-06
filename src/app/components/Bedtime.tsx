@@ -26,7 +26,7 @@ export default function Bedtime() {
   return (
     <>
       <button onClick={showBedtimeModal}>
-        <div className="text-2xl text-gray-400 cursor-pointer hover:text-blue-800">
+        <div className="text-2xl text-gray-400 cursor-pointer hover:text-black">
           Add your bedtime here.
         </div>
       </button>
