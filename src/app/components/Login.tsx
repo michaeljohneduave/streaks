@@ -43,7 +43,7 @@ export default function Login() {
         <Modal>
           <div className="bg-white rounded shadow-lg w-1/3">
             <ModalHeader>
-              <div className="flex items-center">
+              <div className="flex items-center p-4">
                 <span>Sign In</span>
                 <span
                   className="ml-auto cursor-pointer"
@@ -54,7 +54,7 @@ export default function Login() {
               </div>
             </ModalHeader>
             <ModalBody>
-              <main className="p-4">
+              <div className="p-4">
                 <form onSubmit={handleSubmit}>
                   <div className="flex w-full items-center space-x-2">
                     <Input
@@ -82,7 +82,7 @@ export default function Login() {
                     <FaGithub />
                   </Button>
                 </div>
-              </main>
+              </div>
             </ModalBody>
           </div>
         </Modal>
