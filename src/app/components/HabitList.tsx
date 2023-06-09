@@ -1,4 +1,4 @@
-import { Skeleton } from "../component/ui/skeleton";
+import { Skeleton } from "./skeleton";
 
 export default function HabitList() {
   return (
