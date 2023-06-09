@@ -41,5 +41,5 @@ export function ModalBody({ children }: { children: React.ReactNode }) {
 }
 
 export function ModalFooter({ children }: { children: React.ReactNode }) {
-  return <footer>{children}</footer>;
+  return <footer className="border-t text-lg font-semibold">{children}</footer>;
 }
