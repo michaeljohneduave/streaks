@@ -33,7 +33,9 @@ export function Modal({ children }: { children: React.ReactNode }) {
 }
 
 export function ModalHeader({ children }: { children: React.ReactNode }) {
-  return <header className="border-b text-lg font-semibold">{children}</header>;
+  return (
+    <header className="border-b text-2xl font-semibold">{children}</header>
+  );
 }
 
 export function ModalBody({ children }: { children: React.ReactNode }) {

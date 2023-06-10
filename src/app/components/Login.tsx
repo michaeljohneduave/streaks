@@ -41,7 +41,7 @@ export default function Login() {
     <>
       {showModal ? (
         <Modal>
-          <div className="bg-white rounded shadow-lg w-1/3">
+          <div className="bg-white rounded-2xl shadow-lg w-1/3">
             <ModalHeader>
               <div className="flex items-center p-4">
                 <span>Sign In</span>
