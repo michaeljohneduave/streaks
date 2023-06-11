@@ -5,13 +5,13 @@ import HabitList from "./components/HabitList";
 export default function Home() {
   return (
     <>
-      <main className="container mx-auto p-8">
-        <div className="flex space-x-5">
-          <div className="flex flex-col basis-3/4 space-y-5">
+      <main className="container mx-auto py-10 px-28">
+        <div className="flex space-x-10">
+          <div className="flex flex-col basis-[70%] space-y-5">
             <Greeting />
             <HabitBoard />
           </div>
-          <div className="basis-1/4">
+          <div className="basis-[30%]">
             <HabitList />
           </div>
         </div>
