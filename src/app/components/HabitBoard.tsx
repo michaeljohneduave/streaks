@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Progress } from "./ui/progress";
 import AddHabit from "./AddHabit";
+import HabitProgress from "./HabitProgress";
 
 dayjs.extend(isoWeek);
 
@@ -87,7 +88,7 @@ export default function HabitBoard() {
       </div>
       <div className="flex">
         <div className="flex space-x-5">
-          <div>
+          <div className="flex">
             <Button className="rounded-l-full border-r-0" variant="outline">
               <ChevronLeft />
             </Button>
@@ -126,6 +127,10 @@ export default function HabitBoard() {
           </div>
         ) : null}
         <div className="ml-auto">50% achieved</div>
+      </div>
+      <hr />
+      <div className="my-12">
+        <HabitProgress />
       </div>
     </div>
   );
