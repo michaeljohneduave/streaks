@@ -3,7 +3,7 @@
 import dayjs, { Dayjs } from "dayjs";
 import { Skeleton } from "./skeleton";
 import { Button } from "./ui/button";
-import { ChevronLeft, ChevronRight, MoreVertical } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreVertical, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export const Loader = () => {
@@ -43,16 +43,22 @@ export default function HabitList() {
     }
   };
 
+  const handleResetDate = () => {
+    setDate(dayjs() as Dayjs);
+  };
+
   return (
     <div className="space-y-10">
       <div className="flex items-center">
         <div className="flex-grow text-2xl">{date?.format("ddd, MMM DD")}</div>
-        <div className="">
-          <Button variant="ghost" className="hover:bg-transparent">
-            Today
-          </Button>
-        </div>
-        <div>
+        <Button
+          variant="ghost"
+          className="hover:bg-transparent hover:text-blue-500"
+          onClick={handleResetDate}
+        >
+          Today
+        </Button>
+        <div className="flex lg:ml-auto">
           <Button className="rounded-l-full border-r-0" variant="outline">
             <ChevronLeft onClick={() => handleChangeDate("prev")} />
           </Button>
@@ -61,9 +67,8 @@ export default function HabitList() {
           </Button>
         </div>
       </div>
-      <div className="border-2 border-blue-400 border-solid rounded-lg p-5">
+      <div className="border-2 border-blue-400 border-solid rounded-lg p-5 space-y-10">
         <div className="flex h-20 items-center space-x-2">
-          <div className="w-3 h-3 rounded-full bg-[#ff00ad]"></div>
           <div className="w-1 min-h-full rounded-lg bg-[#ff00ad]"></div>
           <div className="flex w-full flex-col space-y-2">
             <div className="flex items-center">
@@ -74,6 +79,34 @@ export default function HabitList() {
             </div>
             <Button className="flex-grow" variant="outline">
               Mark Complete
+            </Button>
+          </div>
+        </div>
+        <div className="flex h-20 items-center space-x-2">
+          <div className="w-1 min-h-full rounded-lg bg-[#ff00ad]"></div>
+          <div className="flex w-full flex-col space-y-2">
+            <div className="flex items-center">
+              <span>Habit 2</span>
+              <div className="ml-auto">
+                <MoreVertical />
+              </div>
+            </div>
+            <Button className="flex-grow" variant="outline">
+              I did it!
+            </Button>
+          </div>
+        </div>
+        <div className="flex h-20 items-center space-x-2">
+          <div className="w-1 min-h-full rounded-lg bg-[#ff00ad]"></div>
+          <div className="flex w-full flex-col space-y-2">
+            <div className="flex items-center">
+              <span>Habit 1</span>
+              <div className="ml-auto">
+                <MoreVertical />
+              </div>
+            </div>
+            <Button className="flex-grow" variant="outline">
+              I avoided it
             </Button>
           </div>
         </div>
