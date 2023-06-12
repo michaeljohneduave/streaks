@@ -12,10 +12,11 @@ import {
   Plus,
 } from "lucide-react";
 import { Button } from "./ui/button";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Progress } from "./ui/progress";
 import AddHabit from "./AddHabit";
-import HabitProgress from "./HabitProgress";
+import WeekProgress from "./WeekProgress";
+import WeekGrid from "./WeekGrid";
 
 dayjs.extend(isoWeek);
 
@@ -130,7 +131,10 @@ export default function HabitBoard() {
       </div>
       <hr />
       <div className="my-12">
-        <HabitProgress />
+        <WeekProgress />
+      </div>
+      <div className="my-12">
+        <WeekGrid />
       </div>
     </div>
   );
