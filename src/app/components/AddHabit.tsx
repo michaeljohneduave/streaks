@@ -94,7 +94,11 @@ export default function AddHabit() {
                 </div>
                 <div className="space-y-3">
                   <span className="text-lg">2. Details</span>
-                  <Textarea name="details" placeholder="Add habit details" />
+                  <Textarea
+                    name="details"
+                    placeholder="Add habit details"
+                    className="max-h-40"
+                  />
                 </div>
                 <div className="space-y-3">
                   <span className="text-lg">3. Type</span>
