@@ -34,19 +34,21 @@ export default function WeekGrid() {
         <div className="flex-[0_0_4rem]"></div>
       </div>
       <div className="flex flex-col space-y-8">
-        {SAMPLE_DATA.map((habit) => (
-          <div className="flex gap-x-8 items-center">
+        {SAMPLE_DATA.map((habit, idx) => (
+          <div key={idx} className="flex gap-x-8 items-center">
             <div className="flex-[0_0_4rem]">
               <span>{habit.name}</span>
             </div>
             <div className="flex-auto">
               <div className="flex w-full justify-between">
-                {habit.days.map((day) => {
+                {habit.days.map((day, idx) => {
                   if (day) {
-                    return <Toggle className="h-8 w-8 bg-green-500" />;
+                    return (
+                      <Toggle key={idx} className="h-8 w-8 bg-green-500" />
+                    );
                   }
 
-                  return <Toggle className="h-8 w-8" />;
+                  return <Toggle key={idx} className="h-8 w-8" />;
                 })}
               </div>
             </div>

@@ -21,8 +21,8 @@ const SAMPLE_DATA = [
 export default function WeekProgress() {
   return (
     <div className="space-y-8">
-      {SAMPLE_DATA.map((habit) => (
-        <div className="flex items-center gap-x-8">
+      {SAMPLE_DATA.map((habit, idx) => (
+        <div className="flex items-center gap-x-8" key={idx}>
           <div className="flex-[0_0_4rem]">
             <span>{habit.name}</span>
           </div>
