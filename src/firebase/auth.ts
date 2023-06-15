@@ -6,7 +6,7 @@ import {
   signInWithEmailLink,
   signInWithPopup,
 } from "firebase/auth";
-import app from "../config";
+import app from "./config";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -39,7 +39,7 @@ async function signInGoogle(): Promise<UserToken> {
 async function signInPasswordless(email: string): Promise<void> {
   try {
     await sendSignInLinkToEmail(auth, email, {
-      url: "http://localhost:3000/verify",
+      url: process.env.NEXT_PUBLIC_FIREBASE_EMAIL_VERIFICATION_URL || "",
       handleCodeInApp: true,
     });
   } catch (error) {
