@@ -1,24 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
+import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { XSquare } from "lucide-react";
 import { Modal, ModalBody, ModalHeader } from "./Modal";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { signInGoogle, signInPasswordless } from "@/firebase/auth/signin";
+import { signInGoogle, signInPasswordless } from "@/firebase/auth";
 import useAuth from "../stores/useAuth";
-import ProfileMenu from "./ProfileMenu";
-import { useGetFromAuth } from "../hooks/zustand";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
   const setLogin = useAuth((state) => state.setLogin);
-  const setLogout = useAuth((state) => state.setLogout);
-  const name = useGetFromAuth(useAuth, (state) => state.name);
-  const photoURL = useGetFromAuth(useAuth, (state) => state.photoURL);
-  const isLoggedIn = useGetFromAuth(useAuth, (state) => state.isLoggedIn);
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const form = new FormData(e.target as HTMLFormElement);
@@ -30,10 +26,10 @@ export default function Login() {
 
   const handleGoogleSignIn = async () => {
     const response = await signInGoogle();
-
     if (response.email && response.displayName) {
       setLogin(response.email, response.displayName, response.photoURL || "");
       setShowModal(false);
+      router.push("/dashboard");
     }
   };
 
@@ -54,7 +50,7 @@ export default function Login() {
               </div>
             </ModalHeader>
             <ModalBody>
-              <div className="p-4">
+              <div className="flex flex-col space-y-3 p-4">
                 <form onSubmit={handleSubmit}>
                   <div className="flex w-full items-center space-x-2">
                     <Input
@@ -69,17 +65,20 @@ export default function Login() {
                     </Button>
                   </div>
                 </form>
-                <div className="mt-2">
-                  <span className="text-center text-gray-500 text-xs">
-                    Or Sign up Using:
+                <div>
+                  <span className="text-center text-gray-500 text-lg">
+                    Or Sign up using:
                   </span>
                 </div>
-                <div className="flex mt-2 gap-1">
-                  <Button className="text-xl" onClick={handleGoogleSignIn}>
-                    <FcGoogle />
+                <div className="flex space-x-5">
+                  <Button className="h-max" onClick={handleGoogleSignIn}>
+                    <FaGoogle size={32} />
                   </Button>
-                  <Button className="text-xl">
-                    <FaGithub />
+                  <Button className="h-max">
+                    <FaGithub size={32} />
+                  </Button>
+                  <Button className="h-max">
+                    <FaFacebook size={32} />
                   </Button>
                 </div>
               </div>
@@ -87,17 +86,9 @@ export default function Login() {
           </div>
         </Modal>
       ) : null}
-      {isLoggedIn ? (
-        <ProfileMenu
-          name={name || ""}
-          photoURL={photoURL || ""}
-          logout={setLogout}
-        />
-      ) : (
-        <div className="cursor-pointer" onClick={() => setShowModal(true)}>
-          Sign In
-        </div>
-      )}
+      <div className="cursor-pointer" onClick={() => setShowModal(true)}>
+        Sign In
+      </div>
     </>
   );
 }

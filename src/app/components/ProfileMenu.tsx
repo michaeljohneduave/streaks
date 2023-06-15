@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
@@ -9,25 +11,28 @@ import {
 } from "./ui/dropdown-menu";
 import { LogOut, Settings, User } from "lucide-react";
 
-type ProfileMenuProps = {
-  name: string;
-  photoURL: string;
-  logout: () => void;
-};
+import useAuth from "../stores/useAuth";
+import { useGetFromAuth } from "../hooks/zustand";
+import { useRouter } from "next/navigation";
 
-export default function ProfileMenu({
-  name,
-  photoURL,
-  logout,
-}: ProfileMenuProps) {
+export default function ProfileMenu() {
+  const router = useRouter();
+  const name = useGetFromAuth(useAuth, (state) => state.name);
+  const photoURL = useGetFromAuth(useAuth, (state) => state.photoURL);
+  const setLogout = useAuth((state) => state.setLogout);
+
   return (
     <div className="flex items">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="cursor-pointer">
-            <AvatarImage src={photoURL} alt={name} />
+            <AvatarImage
+              src={photoURL}
+              alt={name}
+              referrerPolicy="no-referrer"
+            />
             <AvatarFallback className="bg-orange-300">
-              {name.slice(0, 2).toLocaleUpperCase()}
+              {name?.slice(0, 2).toLocaleUpperCase()}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
@@ -49,7 +54,10 @@ export default function ProfileMenu({
           <DropdownMenuSeparator />
           <DropdownMenuLabel
             className="flex items-center cursor-pointer hover:bg-slate-100"
-            onClick={logout}
+            onClick={() => {
+              setLogout();
+              router.push("/");
+            }}
           >
             <LogOut className="mr-5 h-4 w-4" />
             <span>Logout</span>

@@ -1,11 +1,19 @@
+"use client";
+
 import Image from "next/image";
-import LoginContainer from "./LoginContainer";
 import Link from "next/link";
+import Login from "./Login";
+import ProfileMenu from "./ProfileMenu";
+
+import useAuth from "../stores/useAuth";
+import { useGetFromAuth } from "../hooks/zustand";
 
 export default function Navbar() {
+  const isLoggedIn = useGetFromAuth(useAuth, (state) => state.isLoggedIn);
+
   return (
-    <header className="bg-blue-500 text-white shadow py-5">
-      <nav className="container mx-auto flex items-center">
+    <header className={`${isLoggedIn ? "bg-blue-500 text-white" : ""} `}>
+      <nav className="container flex items-center h-20">
         <Link href="/">
           <div className="flex items-center">
             <div className="mr-5">
@@ -22,7 +30,7 @@ export default function Navbar() {
           </div>
         </Link>
         <div className="ml-auto">
-          <LoginContainer />
+          {isLoggedIn ? <ProfileMenu /> : <Login />}
         </div>
       </nav>
     </header>
