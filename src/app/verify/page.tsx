@@ -1,6 +1,6 @@
 "use client";
 
-import { signInPasswordlessConfirm } from "@/firebase/auth/signin";
+import { signInPasswordlessConfirm } from "@/firebase/auth";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
