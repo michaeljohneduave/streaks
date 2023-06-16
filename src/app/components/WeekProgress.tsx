@@ -18,10 +18,27 @@ const SAMPLE_DATA = [
   },
 ];
 
-export default function WeekProgress() {
+type person = {
+  fullName: string;
+};
+
+const getData = async () => {
+  const response = await fetch(
+    "https://api-generator.retool.com/75meh1/streaks?_limit=5"
+  );
+  const data = (await response.json()).map((d: person) => ({
+    name: d.fullName,
+    current: 1,
+    total: 100,
+  })) as typeof SAMPLE_DATA;
+  return data;
+};
+
+export default async function WeekProgress() {
+  const data = await getData();
   return (
     <div className="space-y-8">
-      {SAMPLE_DATA.map((habit, idx) => (
+      {data.map((habit, idx) => (
         <div className="flex items-center gap-x-8" key={idx}>
           <div className="flex-[0_0_4rem]">
             <span>{habit.name}</span>

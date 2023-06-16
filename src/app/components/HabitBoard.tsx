@@ -15,12 +15,16 @@ import { Button } from "./ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Progress } from "./ui/progress";
 import AddHabit from "./AddHabit";
-import WeekProgress from "./WeekProgress";
-import WeekGrid from "./WeekGrid";
 
 dayjs.extend(isoWeek);
 
-export default function HabitBoard() {
+export default function HabitBoard({
+  progress,
+  grid,
+}: {
+  progress: JSX.Element;
+  grid: JSX.Element;
+}) {
   const [activeTab, setActiveTab] = useState("week");
   const [dateLabel, setDateLabel] = useState("");
   const [progressLabel, setProgressLabel] = useState("");
@@ -129,13 +133,8 @@ export default function HabitBoard() {
         ) : null}
         <div className="ml-auto">50% achieved</div>
       </div>
-      <hr />
-      <div className="my-12">
-        <WeekProgress />
-      </div>
-      <div className="my-12">
-        <WeekGrid />
-      </div>
+      <div className="my-12">{progress}</div>
+      <div className="my-12">{grid}</div>
     </div>
   );
 }
