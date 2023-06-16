@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { useGetFromAuth } from "../hooks/zustand";
-import useAuth from "../stores/useAuth";
 import Bedtime from "./Bedtime";
+import { useSession } from "next-auth/react";
+import { Skeleton } from "./ui/skeleton";
 
 export default function Greeting() {
-  const name = useGetFromAuth(useAuth, (state) => state.name);
+  const { data: session } = useSession();
   const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
     const now = dayjs();
+    const name = session?.user?.name || "";
     const fname = name?.split(" ").slice(0, -1).join(" ");
     let greeting = `Good morning, ${fname}`;
 
@@ -22,11 +23,15 @@ export default function Greeting() {
     }
 
     setGreeting(greeting);
-  }, [name]);
+  }, [session?.user?.name]);
 
   return (
     <div>
-      <h1 className="text-5xl">{greeting}!</h1>
+      {session?.user?.name ? (
+        <span className="text-5xl">{greeting}!</span>
+      ) : (
+        <Skeleton className="w-full h-14" />
+      )}
       <Bedtime />
     </div>
   );

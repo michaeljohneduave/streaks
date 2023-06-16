@@ -6,31 +6,17 @@ import { XSquare } from "lucide-react";
 import { Modal, ModalBody, ModalHeader } from "./Modal";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { signInGoogle, signInPasswordless } from "@/firebase/auth";
-import useAuth from "../stores/useAuth";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const setLogin = useAuth((state) => state.setLogin);
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    const form = new FormData(e.target as HTMLFormElement);
-
-    window.localStorage.setItem("email", form.get("email") as string);
-    await signInPasswordless(form.get("email") as string);
-    setShowModal(false);
-  };
+  const handleSubmit = async (e: React.SyntheticEvent) => {};
 
   const handleGoogleSignIn = async () => {
-    const response = await signInGoogle();
-    if (response.email && response.displayName) {
-      setLogin(response.email, response.displayName, response.photoURL || "");
-      setShowModal(false);
-      router.push("/dashboard");
-    }
+    signIn("google", { callbackUrl: "/dashboard" });
   };
 
   return (

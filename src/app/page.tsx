@@ -1,18 +1,14 @@
-"use client";
-
+import { getServerSession } from "next-auth";
 import ClearQuotes from "./components/ClearQuotes";
-import useAuth from "@/app/stores/useAuth";
-import { useGetFromAuth } from "./hooks/zustand";
-import { useRouter } from "next/navigation";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
-  const isLoggedIn = useGetFromAuth(useAuth, (state) => state.isLoggedIn);
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
-  if (isLoggedIn) {
-    router.push("/dashboard");
+  if (session) {
+    redirect("/dashboard");
   }
-
   return (
     <>
       <main className="container mt-10">

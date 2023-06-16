@@ -10,16 +10,11 @@ import {
   DropdownMenuContent,
 } from "./ui/dropdown-menu";
 import { LogOut, Settings, User } from "lucide-react";
-
-import useAuth from "../stores/useAuth";
-import { useGetFromAuth } from "../hooks/zustand";
-import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 export default function ProfileMenu() {
-  const router = useRouter();
-  const name = useGetFromAuth(useAuth, (state) => state.name);
-  const photoURL = useGetFromAuth(useAuth, (state) => state.photoURL);
-  const setLogout = useAuth((state) => state.setLogout);
+  const { data: session, status } = useSession();
+  const name = session?.user?.name || "";
 
   return (
     <div className="flex items">
@@ -27,12 +22,12 @@ export default function ProfileMenu() {
         <DropdownMenuTrigger asChild>
           <Avatar className="cursor-pointer">
             <AvatarImage
-              src={photoURL}
+              src={session?.user?.image || ""}
               alt={name}
               referrerPolicy="no-referrer"
             />
             <AvatarFallback className="bg-orange-300">
-              {name?.slice(0, 2).toLocaleUpperCase()}
+              {name.slice(0, 2).toLocaleUpperCase()}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
@@ -55,8 +50,7 @@ export default function ProfileMenu() {
           <DropdownMenuLabel
             className="flex items-center cursor-pointer hover:bg-slate-100"
             onClick={() => {
-              setLogout();
-              router.push("/");
+              signOut({ callbackUrl: "/" });
             }}
           >
             <LogOut className="mr-5 h-4 w-4" />
