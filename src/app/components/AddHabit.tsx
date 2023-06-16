@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "./Modal";
 import { Plus, XSquare } from "lucide-react";
 import { Input } from "./ui/input";

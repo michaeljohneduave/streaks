@@ -1,7 +1,7 @@
 "use client";
 
 import dayjs, { Dayjs } from "dayjs";
-import { Skeleton } from "./skeleton";
+import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight, MoreVertical, X } from "lucide-react";
 import { useEffect, useState } from "react";
