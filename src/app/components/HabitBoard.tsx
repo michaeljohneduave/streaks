@@ -22,8 +22,8 @@ export default function HabitBoard({
   progress,
   grid,
 }: {
-  progress: JSX.Element;
-  grid: JSX.Element;
+  progress: React.ReactNode;
+  grid: React.ReactNode;
 }) {
   const [activeTab, setActiveTab] = useState("week");
   const [dateLabel, setDateLabel] = useState("");
