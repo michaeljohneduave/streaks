@@ -29,7 +29,7 @@ export default function AddHabit() {
     } else {
       setMulti(null);
     }
-  }, [days.length]);
+  }, [days]);
 
   useEffect(() => {
     if (!showModal) {
