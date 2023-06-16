@@ -1,6 +1,5 @@
 "use client";
 
-import { signInPasswordlessConfirm } from "@/firebase/auth";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -14,15 +13,11 @@ import {
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import useAuth from "../stores/useAuth";
-import { useRouter } from "next/navigation";
 
 export default function Verify() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [emailFilled, setEmailFilled] = useState(false);
-  const setLogin = useAuth((state) => state.setLogin);
 
   useEffect(() => {
     const email = window.localStorage.getItem("email");
@@ -34,25 +29,7 @@ export default function Verify() {
     }
   }, []);
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    const form = new FormData(e.target as HTMLFormElement);
-    setIsLoading(true);
-    const result = await signInPasswordlessConfirm(email, window.location.href);
-
-    if (result.email) {
-      let n = result.displayName || "";
-
-      if (form.get("name")) {
-        n = form.get("name") as string;
-      }
-
-      setLogin(result.email, n, result.photoURL || "");
-      router.push("/");
-    }
-
-    setIsLoading(false);
-  };
+  const handleSubmit = async (e: React.SyntheticEvent) => {};
 
   return (
     <div className="flex justify-center">
