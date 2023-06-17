@@ -13,10 +13,14 @@ export default function Login() {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {};
+  const handleSubmit = (e: React.SyntheticEvent) => {};
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = () => {
     signIn("google", { callbackUrl: "/dashboard" });
+  };
+
+  const handleFacebookSignIn = () => {
+    signIn("facebook", { callbackUrl: "/dashboard" });
   };
 
   return (
@@ -63,7 +67,7 @@ export default function Login() {
                   <Button className="h-max">
                     <FaGithub size={32} />
                   </Button>
-                  <Button className="h-max">
+                  <Button className="h-max" onClick={handleFacebookSignIn}>
                     <FaFacebook size={32} />
                   </Button>
                 </div>
