@@ -34,11 +34,11 @@ const getData = async () => {
   return data;
 };
 
-export default async function WeekProgress() {
-  const data = await getData();
+export default async function HabitProgressView() {
   return (
     <div className="space-y-8">
-      {data.map((habit, idx) => (
+      <div className="h-6"></div>
+      {SAMPLE_DATA.map((habit, idx) => (
         <div className="flex items-center gap-x-8" key={idx}>
           <div className="flex-[0_0_4rem]">
             <span>{habit.name}</span>
