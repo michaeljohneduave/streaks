@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuLabel,
@@ -12,6 +12,7 @@ import {
 import { LogOut, Settings, User } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
+import Image from "next/image";
 
 export default function ProfileMenu({ session }: { session: Session }) {
   const name = session?.user?.name || "";
@@ -21,10 +22,11 @@ export default function ProfileMenu({ session }: { session: Session }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="cursor-pointer">
-            <AvatarImage
+            <Image
               src={session?.user?.image || ""}
               alt={name}
-              referrerPolicy="no-referrer"
+              width={40}
+              height={40}
             />
             <AvatarFallback className="bg-orange-300">
               {name.slice(0, 2).toLocaleUpperCase()}
