@@ -1,9 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import ProfileBar from "./ProfileBar";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import Login from "./Login";
+import ProfileMenu from "./ProfileMenu";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const session = await getServerSession(authOptions);
+
   return (
     <header className="bg-blue-500 text-white">
       <nav className="container flex items-center h-20">
@@ -23,7 +28,7 @@ export default function Navbar() {
           </div>
         </Link>
         <div className="ml-auto">
-          <ProfileBar />
+          {session?.user ? <ProfileMenu session={session} /> : <Login />}
         </div>
       </nav>
     </header>

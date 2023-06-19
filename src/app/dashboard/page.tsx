@@ -1,19 +1,10 @@
-import { getServerSession } from "next-auth";
 import Greeting from "../components/Greeting";
 import HabitBoard from "../components/HabitBoard";
 import HabitList from "../components/HabitList";
 import WeekGrid from "../components/WeekGrid";
 import WeekProgress from "../components/WeekProgress";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect("/");
-  }
-
   return (
     <>
       <main className="container mx-auto py-10 px-28">

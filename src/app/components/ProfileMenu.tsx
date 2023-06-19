@@ -10,10 +10,10 @@ import {
   DropdownMenuContent,
 } from "./ui/dropdown-menu";
 import { LogOut, Settings, User } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { Session } from "next-auth";
 
-export default function ProfileMenu() {
-  const { data: session, status } = useSession();
+export default function ProfileMenu({ session }: { session: Session }) {
   const name = session?.user?.name || "";
 
   return (
