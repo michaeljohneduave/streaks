@@ -6,12 +6,10 @@ import { XSquare } from "lucide-react";
 import { Modal, ModalBody, ModalHeader } from "./Modal";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 export default function Login() {
   const [showModal, setShowModal] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = (e: React.SyntheticEvent) => {};
 

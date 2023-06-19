@@ -1,15 +1,10 @@
-import { getToken } from "next-auth/jwt";
+import { withAuth } from "next-auth/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  if (path === "/dashboard") {
-    const token = await getToken({ req });
+export const config = {
+  matcher: ["/dashboard"],
+};
 
-    if (!token) {
-      return NextResponse.redirect(new URL("/", req.nextUrl.origin));
-    }
-  }
-
+export default withAuth(function middleware(req: NextRequest) {
   return NextResponse.next();
-}
+});
