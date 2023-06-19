@@ -10,8 +10,7 @@ export default async function Dashboard() {
       <main className="container mx-auto py-10 px-28">
         <div className="flex space-x-10">
           <div className="flex flex-col basis-[70%] space-y-5">
-            <Greeting />
-            <HabitBoard progress={<WeekProgress />} grid={<WeekGrid />} />
+            <Greeting name={session?.user?.name || ""} />
           </div>
           <div className="basis-[30%]">
             <HabitList />

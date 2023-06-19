@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import {
   ArrowUp,
@@ -9,10 +9,9 @@ import {
   ChevronLeft,
   ChevronRight,
   LayoutGrid,
-  Plus,
 } from "lucide-react";
 import { Button } from "./ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Progress } from "./ui/progress";
 import AddHabit from "./AddHabit";
 
@@ -25,31 +24,44 @@ export default function HabitBoard({
   progress: React.ReactNode;
   grid: React.ReactNode;
 }) {
-  const [activeTab, setActiveTab] = useState("week");
-  const [dateLabel, setDateLabel] = useState("");
-  const [progressLabel, setProgressLabel] = useState("");
+  const [activeTab, setActiveTab] = useState<string>("week");
+  const [date, setDate] = useState<Dayjs>(dayjs());
+  const [view, setView] = useState("progress");
+  let dateLabel: string = "";
 
-  useEffect(() => {
-    const now = dayjs();
+  switch (activeTab) {
+    case "week":
+      const weekStart = date.startOf("isoWeek").format("ddd, MMM DD");
+      const weekEnd = date.endOf("isoWeek").format("ddd, MMM DD");
 
+      dateLabel = `${weekStart} - ${weekEnd}`;
+      break;
+    case "month":
+      dateLabel = date.format("MMMM YYYY");
+      break;
+    case "year":
+      const yearStart = date.subtract(1, "year").format("MMM DD, YYYY");
+      dateLabel = `${yearStart} - Today`;
+      break;
+    case "all":
+      dateLabel = "All Time";
+      break;
+  }
+
+  const handleMoveDate = (type: string) => {
+    const mult = type === "prev" ? 1 : -1;
     switch (activeTab) {
       case "week":
-        const weekStart = now.startOf("isoWeek").format("ddd, MMM DD");
-        const weekEnd = now.endOf("isoWeek").format("ddd, MMM DD");
-        setDateLabel(`${weekStart} - ${weekEnd}`);
+        setDate((d) => d.subtract(mult, "week"));
         break;
       case "month":
-        setDateLabel(now.format("MMMM YYYY"));
+        setDate((d) => d.subtract(mult, "month"));
         break;
       case "year":
-        const yearStart = now.subtract(1, "year").format("MMM DD, YYYY");
-        setDateLabel(`${yearStart} - Today`);
-        break;
-      case "all":
-        setDateLabel("All Time");
+        setDate((d) => d.subtract(mult, "year"));
         break;
     }
-  }, [activeTab]);
+  };
 
   return (
     <div className="space-y-5">
@@ -94,10 +106,18 @@ export default function HabitBoard({
       <div className="flex">
         <div className="flex space-x-5">
           <div className="flex">
-            <Button className="rounded-l-full border-r-0" variant="outline">
+            <Button
+              className="rounded-l-full border-r-0"
+              variant="outline"
+              onClick={() => handleMoveDate("prev")}
+            >
               <ChevronLeft />
             </Button>
-            <Button className="rounded-r-full border-l-0" variant="outline">
+            <Button
+              className="rounded-r-full border-l-0"
+              variant="outline"
+              onClick={() => handleMoveDate("next")}
+            >
               <ChevronRight />
             </Button>
           </div>
@@ -106,7 +126,10 @@ export default function HabitBoard({
           </div>
         </div>
         <div className="ml-auto">
-          <Tabs defaultValue="progress">
+          <Tabs
+            defaultValue="progress"
+            onValueChange={(val: string) => setView(val)}
+          >
             <TabsList className="flex rounded-full">
               <TabsTrigger
                 className="basis-1/4 rounded-full m-1"
@@ -133,8 +156,13 @@ export default function HabitBoard({
         ) : null}
         <div className="ml-auto">50% achieved</div>
       </div>
-      <div className="my-12">{progress}</div>
-      <div className="my-12">{grid}</div>
+      {view === "progress" ? (
+        <div className="my-12">{progress}</div>
+      ) : activeTab === "week" ? (
+        <div className="my-12">{grid}</div>
+      ) : (
+        <div className="my-12">No data to show</div>
+      )}
     </div>
   );
 }

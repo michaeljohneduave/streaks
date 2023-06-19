@@ -6,6 +6,8 @@ import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight, MoreVertical, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const now = dayjs();
+
 export const Loader = () => {
   return (
     <div className="">
@@ -29,11 +31,7 @@ export const Loader = () => {
 };
 
 export default function HabitList() {
-  const [date, setDate] = useState<Dayjs | undefined>();
-
-  useEffect(() => {
-    setDate(dayjs());
-  }, []);
+  const [date, setDate] = useState<Dayjs | undefined>(now);
 
   const handleChangeDate = (type: string) => {
     if (type === "prev") {
