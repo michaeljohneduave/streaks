@@ -1,7 +1,8 @@
 import NextAuth from "next-auth/next";
-// import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
+import { Account, DefaultSession, NextAuthOptions, Profile } from "next-auth";
+import { prisma } from "@/lib/db";
 
 export const authOptions = {
   providers: [
@@ -18,11 +19,45 @@ export const authOptions = {
       clientSecret: process.env.FACEBOOK_SECRET || "",
     }),
   ],
-
   pages: {
     signIn: "/",
   },
-};
+  callbacks: {
+    async signIn({
+      user,
+      account,
+      profile,
+    }: {
+      user: DefaultSession["user"];
+      account: Account;
+      profile: Profile;
+    }): Promise<boolean> {
+      console.log("signIn", user, account, profile);
+      // create user if not exists
+      // we only check for the email and upsert accordingly
+      try {
+        const email = user?.email || profile.email || "";
+
+        if (!email) {
+          return false;
+        }
+
+        await prisma.user.upsert({
+          where: { email: email },
+          update: {},
+          create: {
+            email: email,
+            name: profile.name || "",
+          },
+        });
+      } catch (e) {
+        console.log(e);
+      }
+
+      return true;
+    },
+  },
+} as NextAuthOptions;
 
 const handler = NextAuth(authOptions);
 
