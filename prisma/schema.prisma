@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habits    Habit[]
+  Streak    Streak[]
+}
+
+model Habit {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  days        Days[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  habitLog    HabitLog[]
+  Streak      Streak[]
+}
+
+model HabitLog {
+  id        String   @id @default(uuid())
+  date      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id])
+}
+
+model Streak {
+  id        String   @id @default(uuid())
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Days {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
