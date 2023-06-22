@@ -1,34 +1,11 @@
 "use client";
 
 import dayjs, { Dayjs } from "dayjs";
-import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight, MoreVertical, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const now = dayjs();
-
-export const Loader = () => {
-  return (
-    <div className="">
-      <div className="space-y-2">
-        <Skeleton className="w-1/2 h-5" />
-        <Skeleton className="w-1/2 h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-        <Skeleton className="w-full h-5" />
-      </div>
-    </div>
-  );
-};
 
 export default function HabitList() {
   const [date, setDate] = useState<Dayjs | undefined>(now);

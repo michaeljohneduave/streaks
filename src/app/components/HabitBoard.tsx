@@ -50,17 +50,8 @@ export default function HabitBoard({
 
   const handleMoveDate = (type: string) => {
     const mult = type === "prev" ? 1 : -1;
-    switch (activeTab) {
-      case "week":
-        setDate((d) => d.subtract(mult, "week"));
-        break;
-      case "month":
-        setDate((d) => d.subtract(mult, "month"));
-        break;
-      case "year":
-        setDate((d) => d.subtract(mult, "year"));
-        break;
-    }
+
+    setDate((d) => d.subtract(mult, activeTab as dayjs.ManipulateType));
   };
 
   return (

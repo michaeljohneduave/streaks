@@ -32,7 +32,6 @@ export const authOptions = {
       account: Account;
       profile: Profile;
     }): Promise<boolean> {
-      console.log("signIn", user, account, profile);
       // create user if not exists
       // we only check for the email and upsert accordingly
       try {
