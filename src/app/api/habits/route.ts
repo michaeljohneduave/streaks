@@ -1,3 +1,4 @@
+import { getHabits } from "@/lib/data";
 import { prisma } from "@/lib/db";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -5,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const jwt = await getToken({ req });
 
+  // TODOS: handle in middleware
   if (!jwt || !jwt?.email) {
     return NextResponse.json("Unauthorized", {
       status: 401,
@@ -21,28 +23,10 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const habits = await prisma.habit.findMany({
-    where: {
-      user: {
-        email: jwt.email,
-      },
-    },
-    include: {
-      user: true,
-      _count: {
-        select: {
-          habitLog: {
-            where: {
-              createdAt: {
-                gte: new Date(dateStart),
-                lte: new Date(dateEnd),
-              },
-              marked: true,
-            },
-          },
-        },
-      },
-    },
+  const habits = await getHabits({
+    dateStart: new Date(dateStart),
+    dateEnd: new Date(dateEnd),
+    email: jwt.email,
   });
 
   return NextResponse.json(habits);
