@@ -1,21 +1,7 @@
+import { Habit } from "@prisma/client";
 import { Toggle } from "./ui/toggle";
 
-const SAMPLE_DATA = [
-  {
-    name: "Habit 1",
-    days: [true, true, true, false, false, true, false],
-  },
-  {
-    name: "Habit 2",
-    days: [true, true, false, false, true, false, false],
-  },
-  {
-    name: "Habit 3",
-    days: [true, true, true, true, true, true, true],
-  },
-];
-
-export default function HabitWeekGrid() {
+export default function HabitWeekGrid({ habits }: { habits: Habit[] }) {
   return (
     <div className="space-y-8">
       <div className="flex gap-x-8">
@@ -34,7 +20,7 @@ export default function HabitWeekGrid() {
         <div className="flex-[0_0_4rem]"></div>
       </div>
       <div className="flex flex-col space-y-8">
-        {SAMPLE_DATA.map((habit, idx) => (
+        {habits.map((habit, idx) => (
           <div key={idx} className="flex gap-x-8 items-center">
             <div className="flex-[0_0_4rem]">
               <span>{habit.name}</span>
