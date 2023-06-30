@@ -51,6 +51,7 @@ model HabitLog {
   habitId   String
   habit     Habit    @relation(fields: [habitId], references: [id])
 
+  @@unique([habitId, date])
   @@map("habit_logs")
 }
 
