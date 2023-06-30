@@ -1,11 +1,10 @@
-import { HabitWithCount } from "../../lib/data";
-import { Progress } from "./ui/progress";
-import dayjs from "dayjs";
+import { HabitsWithLogs } from "@/lib/data";
+import { Progress } from "../ui/progress";
 
 export default function HabitProgressView({
   habits,
 }: {
-  habits: HabitWithCount[];
+  habits: HabitsWithLogs;
   dateStart: Date;
   dateEnd: Date;
 }) {
@@ -19,12 +18,12 @@ export default function HabitProgressView({
           </div>
           <div className="flex-auto">
             <Progress
-              value={habit._count.habitLog}
+              value={(habit.habitLog.length / habit.days.length) * 100}
               className="w-full h-[20px]"
             />
           </div>
           <span className="flex-[0_0_4rem]">
-            {habit._count.habitLog} / {habit.days.length}
+            {habit.habitLog.length} / {habit.days.length}
           </span>
         </div>
       ))}

@@ -3,9 +3,13 @@ import Greeting from "../components/Greeting";
 import HabitBoard from "../components/HabitBoard";
 import HabitList from "../components/HabitList";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { prisma } from "@/lib/db";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import isoWeek from "dayjs/plugin/isoWeek";
 import { getHabits } from "../../lib/data";
+
+dayjs.extend(utc);
+dayjs.extend(isoWeek);
 
 async function getData(dateStart: string, dateEnd: string) {
   "use server";
@@ -22,8 +26,8 @@ async function getData(dateStart: string, dateEnd: string) {
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
   const habits = await getData(
-    dayjs().startOf("isoWeek").toISOString(),
-    dayjs().endOf("isoWeek").toISOString()
+    dayjs.utc().startOf("isoWeek").toISOString(),
+    dayjs.utc().endOf("isoWeek").toISOString()
   );
 
   return (

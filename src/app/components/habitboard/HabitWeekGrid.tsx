@@ -1,7 +1,22 @@
-import { Habit } from "@prisma/client";
-import { Toggle } from "./ui/toggle";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import type { HabitsWithLogs } from "@/lib/data";
+import { cn } from "@/lib/utils";
+import ToggleItem from "./ToggleItem";
 
-export default function HabitWeekGrid({ habits }: { habits: Habit[] }) {
+const DAYS = [1, 2, 3, 4, 5, 6, 7];
+
+dayjs.extend(utc);
+
+export default function HabitWeekGrid({
+  habits,
+  dateStart,
+  dateEnd,
+}: {
+  habits: HabitsWithLogs;
+  dateStart: Date;
+  dateEnd: Date;
+}) {
   return (
     <div className="space-y-8">
       <div className="flex gap-x-8">
@@ -27,14 +42,29 @@ export default function HabitWeekGrid({ habits }: { habits: Habit[] }) {
             </div>
             <div className="flex-auto">
               <div className="flex w-full justify-between">
-                {habit.days.map((day, idx) => {
-                  if (day) {
+                {DAYS.map((day, idx2) => {
+                  const date = dayjs
+                    .utc(dateStart)
+                    .add(idx2, "day") // offset by idx2 days
+                    .toDate();
+                  if (habit.days.includes(day)) {
+                    const log = habit.habitLog.find(
+                      (log) =>
+                        log.date.toLocaleDateString() ===
+                        date.toLocaleDateString()
+                    );
                     return (
-                      <Toggle key={idx} className="h-8 w-8 bg-green-500" />
+                      <ToggleItem
+                        key={`${log?.id ?? date.toISOString()}`}
+                        habitId={habit.id}
+                        date={date}
+                        habitLogId={log?.id}
+                        marked={log?.marked}
+                      />
                     );
                   }
 
-                  return <Toggle key={idx} className="h-8 w-8" />;
+                  return <div key={idx2} className="h-8 w-8" />;
                 })}
               </div>
             </div>

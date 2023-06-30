@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import {
@@ -14,9 +14,11 @@ import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Progress } from "./ui/progress";
 import AddHabit from "./AddHabit";
-import HabitProgressView from "./HabitProgressView";
-import HabitWeekGrid from "./HabitWeekGrid";
-import { HabitWithCount } from "../../lib/data";
+import HabitProgressView from "@/app/components/habitboard/HabitProgressView";
+import HabitWeekGrid from "@/app/components/habitboard/HabitWeekGrid";
+import { HabitsWithLogs } from "@/lib/data";
+import HabitMonthGrid from "./habitboard/HabitMonthGrid";
+import { date, set } from "zod";
 
 dayjs.extend(isoWeek);
 
@@ -24,33 +26,80 @@ export default function HabitBoard({
   initialHabits,
   getHabits,
 }: {
-  initialHabits: HabitWithCount[];
-  getHabits: (dateStart: string, dateEnd: string) => Promise<HabitWithCount[]>;
+  initialHabits: HabitsWithLogs;
+  getHabits: (dateStart: string, dateEnd: string) => Promise<HabitsWithLogs>;
 }) {
-  const [activeTab, setActiveTab] = useState<string>("week");
-  const [date, setDate] = useState<Dayjs>(dayjs());
-  const [view, setView] = useState("progress");
-  const [habits, setHabits] = useState(initialHabits);
-  let dateLabel: string = "";
-  let dateStart: Dayjs = date.startOf("isoWeek");
-  let dateEnd: Dayjs = date.endOf("isoWeek");
-  // let habits = initialHabits;
+  const [activeTab, setActiveTab] = useState("week");
+  // Use utc to unify date format?
+  const date = useRef<string>(dayjs.utc().toISOString());
+  const [view, setView] = useState("grid");
+  const [habits, setHabits] = useState<HabitsWithLogs>(initialHabits);
+  const [offset, setOffset] = useState(0);
+  const [dateStart, setDateStart] = useState<Dayjs>(
+    dayjs(date.current).startOf("isoWeek")
+  );
+  const [dateEnd, setDateEnd] = useState<Dayjs>(
+    dayjs(date.current).endOf("isoWeek")
+  );
+  let dateLabel = "";
+
+  useEffect(() => {
+    let ignore = false;
+    let dateStart: Dayjs = dayjs(date.current)
+      .startOf("isoWeek")
+      .subtract(offset, "week");
+    let dateEnd: Dayjs = dayjs(date.current)
+      .endOf("isoWeek")
+      .subtract(offset, "week");
+
+    switch (activeTab) {
+      case "week":
+        dateStart = dayjs(date.current)
+          .startOf("isoWeek")
+          .subtract(offset, "week");
+        dateEnd = dayjs(date.current).endOf("isoWeek").subtract(offset, "week");
+        break;
+      case "month":
+        dateStart = dayjs(date.current)
+          .startOf("month")
+          .subtract(offset, "month");
+        dateEnd = dayjs(date.current).endOf("month").subtract(offset, "month");
+        break;
+      case "year":
+        dateStart = dayjs(date.current)
+          .startOf("year")
+          .subtract(offset, "year");
+        dateEnd = dayjs(date.current);
+        break;
+      case "all":
+        dateStart = dayjs(0);
+        dateEnd = dayjs(date.current);
+        break;
+    }
+
+    setDateStart(dateStart);
+    setDateEnd(dateEnd);
+
+    getHabits(dateStart.toISOString(), dateEnd.toISOString()).then((data) => {
+      if (!ignore) {
+        setHabits(data);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
+  }, [offset, activeTab]);
 
   switch (activeTab) {
     case "week":
-      dateStart = date.startOf("isoWeek");
-      dateEnd = date.endOf("isoWeek");
-
       dateLabel = `${dateStart.format("ddd, MMM DD")} - ${dateEnd.format(
         "ddd, MMM DD"
       )}`;
       break;
     case "month":
-      dateLabel = date.format("MMMM YYYY");
+      dateLabel = dateStart.format("MMMM YYYY");
       break;
     case "year":
-      dateStart = date.subtract(1, "year");
-      dateEnd = dayjs();
       dateLabel = `${dateStart.format("ddd, MMM DD")} - Today`;
       break;
     case "all":
@@ -58,17 +107,10 @@ export default function HabitBoard({
       break;
   }
 
-  useEffect(() => {
-    getHabits(dateStart.toISOString(), dateEnd.toISOString()).then((data) => {
-      console.log(data);
-      setHabits(data);
-    });
-  }, [activeTab, date]);
-
   const handleMoveDate = (type: string) => {
     const mult = type === "prev" ? 1 : -1;
 
-    setDate((d) => d.subtract(mult, activeTab as dayjs.ManipulateType));
+    setOffset((prev) => prev + mult);
   };
 
   return (
@@ -134,10 +176,7 @@ export default function HabitBoard({
           </div>
         </div>
         <div className="ml-auto">
-          <Tabs
-            defaultValue="progress"
-            onValueChange={(val: string) => setView(val)}
-          >
+          <Tabs value={view} onValueChange={(val: string) => setView(val)}>
             <TabsList className="flex rounded-full">
               <TabsTrigger
                 className="basis-1/4 rounded-full m-1"
@@ -173,9 +212,20 @@ export default function HabitBoard({
           />
         </div>
       ) : activeTab === "week" ? (
-        <div className="my-12">{<HabitWeekGrid habits={habits} />}</div>
+        <div className="my-12">
+          <HabitWeekGrid
+            habits={habits}
+            dateStart={dateStart.toDate()}
+            dateEnd={dateEnd.toDate()}
+          />
+        </div>
       ) : (
-        <div className="my-12">No data to show</div>
+        <div className="my-12">
+          <HabitMonthGrid
+            month={dayjs(dateStart).month()}
+            year={dayjs(dateStart).year()}
+          />
+        </div>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { Habit } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { z } from "zod";
 
@@ -10,16 +10,9 @@ const getHabitsParams = z.object({
 });
 
 export type GetHabitsParams = z.infer<typeof getHabitsParams>;
-export type HabitWithCount = Habit & {
-  _count: {
-    habitLog: number;
-  };
-};
-export async function getHabits(
-  params: GetHabitsParams
-): Promise<HabitWithCount[]> {
+export async function getHabits(params: GetHabitsParams) {
   const now = dayjs();
-
+  console.log(params);
   const habits = await prisma.habit.findMany({
     where: {
       user: {
@@ -37,18 +30,18 @@ export async function getHabits(
       ],
     },
     include: {
-      user: true,
-      _count: {
+      user: {
         select: {
-          habitLog: {
-            where: {
-              createdAt: {
-                gte: params.dateStart,
-                lte: params.dateEnd,
-              },
-              marked: true,
-            },
+          email: true,
+        },
+      },
+      habitLog: {
+        where: {
+          date: {
+            gte: params.dateStart,
+            lte: params.dateEnd,
           },
+          marked: true,
         },
       },
     },
@@ -58,4 +51,36 @@ export async function getHabits(
   });
 
   return habits;
+}
+export type HabitsWithLogs = Prisma.PromiseReturnType<typeof getHabits>;
+
+const createHabitLogParams = z.object({
+  habitId: z.string(),
+  habitLogId: z.string().optional(),
+  date: z.date(),
+  marked: z.boolean(),
+});
+
+export type CreateHabitLogParams = z.infer<typeof createHabitLogParams>;
+export async function createHabitLog(params: CreateHabitLogParams) {
+  const date = new Date(params.date);
+
+  const log = await prisma.habitLog.upsert({
+    where: {
+      habitId_date: {
+        habitId: params.habitId,
+        date: params.date,
+      },
+    },
+    update: {
+      marked: params.marked,
+    },
+    create: {
+      habitId: params.habitId,
+      date,
+      marked: params.marked,
+    },
+  });
+
+  return log;
 }
